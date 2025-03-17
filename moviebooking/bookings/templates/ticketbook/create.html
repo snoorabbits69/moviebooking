@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+Checkout
+{% endblock %}
+{% block content %}
+<div>
+Checkout:<br>
+show:{{show.movie}}<br>
+date:{{show.start_date}}<br>
+time:{{show.showtime}}<br>
+Seats:{{seats.seat}}<br>
+
+
+Total:{{seats.no}}*{{show.price}}={{total}}<br>
+<form class="auth-form" method="POST">
+    <div class="form-group">
+{{form}}
+<input type="submit" value="Pay"/>
+{% csrf_token %}
+    </div>
+</form>
+
+</div>
+
+
+
+
+
+
+      
+      
+   
+        
+       
+
+{% endblock  %}
+

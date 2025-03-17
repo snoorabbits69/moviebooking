@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load movie_tags %}
+{% block title %}
+{{ movie.title }}
+{% endblock  %}
+{% block  content%}
+<div class="movie-detail">
+    <div class="movie-banner" >
+      <div class="overlay"></div>
+    </div>
+    
+    <div class="detail-content">
+      <div class="detail-poster">
+        <img src={{movie.posterimage.url}} alt={{movie.title}} />
+      </div>
+      
+      <div class="detail-info">
+        <h1>{{movie.title}}</h1>
+        <div class="detail-meta">
+          <span class="detail-rating">{{movie.Rating}}</span>
+          <span class="detail-duration">{{movie.duration}}</span>
+          <span class="detail-genre">{{ movie.genre.all|join:", "}}</span>
+        </div>
+        
+        <div class="detail-description">
+          <p>{{movie.description}}</p>
+        </div>
+        
+        <div class="detail-credits">
+          <p><strong>Director:</strong> director</p>
+          <p><strong>Cast:</strong> cast</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="show-times">
+      <h2>Available Shows</h2>
+      <div class="show-list">
+      {% for show in movie.show_times.all  %}
+          <div class="show-card" key={show.id}>
+            <div class="show-info">
+              <div class="show-date">{{show.start_date}}</div> 
+              <div class="show-date">{{show.room.name}}</div> 
+              <div class="show-time">{{show.showtime}}</div>
+              <div class="show-price">Rs{{show.price}}</div>
+              <a href="{{show.get_absolute_url}}" class="book-btn">Book Now</a>  
+            </div>
+          
+          </div>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+  
+
+
+
+{% endblock  %}

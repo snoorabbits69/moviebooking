@@ -1,0 +1,56 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+{% block title %}
+Movie Hub
+{% endblock  %}
+
+    </title>
+  
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+    <header class="header">
+        <div class="logo">MovieHub</div>
+        <nav class="nav">
+          <ul>
+            <li><a href="/">Home</a ></li>
+            <li><a href="{% url "available_shows"  %}">Shows</a ></li>
+              <li><a href={% url "see_bookings"%}>Bookings</a ></li>
+                {% if request.user.is_authenticated  %}
+           
+                <li><a href="{% url "logout" %}"  class="login-btn">Sign out</a ></li>
+                    {% else %}
+            <li><a href="{% url "login" %}"  class="login-btn">Login</a ></li>
+
+                {% endif %}
+          </ul>
+        </nav>
+      </header>
+
+    {% block content %}
+    
+    {% endblock  %}
+
+       
+    <footer class="footer">
+        <p>&copy; 2024 MovieHub. All rights reserved.</p>
+      </footer>
+    </div>
+</body>
+<script src={% static "js/script.js" %}></script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+{% block domready %}
+{% endblock %}
+})
+</script>
+</html>

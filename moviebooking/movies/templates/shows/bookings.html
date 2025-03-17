@@ -1,0 +1,120 @@
+
+
+{% extends "base.html" %}
+{% block title %}
+booking
+{% endblock  %}
+
+{% block content %}
+<div class="booking-search">
+<form method="post">
+<input type="text" name="bookingcode" placeholder="Enter your booking code"/>
+<input type="submit" value="Search" class="browse-btn"/>
+{% csrf_token %}
+
+</form>
+</div>
+
+{% if booking  %}
+
+{% with show=booking.get_show %}
+  <div class="booking-list">
+    <div class="booking-card" key={{ booking.id }}>
+      <div class="booking-poster">
+        <img src="{{ show.movie.posterimage.url }}" alt="{{ show.movie }}" />
+      </div>
+      <div class="booking-details">
+        <h3>{{ show.movie }}</h3>
+        <div class="booking-meta">
+          <div class="booking-date-time">
+            <p><strong>Date:</strong> {{ show.start_date }}</p>
+            <p><strong>Time:</strong> {{ show.showtime }}</p>
+          </div>
+          <div class="booking-tickets">
+            <p><strong>Booking code:</strong> {{ booking.booking_code }}</p>
+            <p><strong>Seats:</strong> 
+                {% for seat in booking.booking_items.all  %}
+               {{ seat.seat }}
+            {% endfor %}
+            </p>
+          </div>
+          <div class="booking-total">
+            <p><strong>Total:</strong> ${{ booking.get_total_cost }}</p>
+          </div>
+        </div>
+        <div class="booking-actions">
+          <a class="view-ticket-btn" >View Ticket</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endwith %}
+
+{% endif %}
+
+{% if error_message %}
+{{error_message}}
+{% endif %}
+
+
+
+
+{% if request.user.is_authenticated  %}
+<div class="booking-history">
+    <h2>Booking History</h2>
+    
+  {% if mybookings %}
+  {% for booking in mybookings %}
+  {% with show=booking.get_show %}
+  <div class="booking-list">
+    <div class="booking-card" key={{ booking.id }}>
+      <div class="booking-poster">
+        <img src="{{ show.movie.posterimage.url }}" alt="{{ show.movie }}" />
+      </div>
+      <div class="booking-details">
+        <h3>{{ show.movie }}</h3>
+        <div class="booking-meta">
+          <div class="booking-date-time">
+            <p><strong>Date:</strong> {{ show.start_date }}</p>
+            <p><strong>Time:</strong> {{ show.showtime }}</p>
+          </div>
+          <div class="booking-tickets">
+            <p><strong>Booking code:</strong> {{ booking.booking_code }}</p>
+            <p><strong>Seats:</strong> 
+                {% for seat in booking.booking_items.all  %}
+               {{ seat.seat }}
+            {% endfor %}
+            </p>
+          </div>
+          <div class="booking-total">
+            <p><strong>Total:</strong> ${{ booking.get_total_cost }}</p>
+          </div>
+        </div>
+        <div class="booking-actions">
+          <a class="view-ticket-btn" href="{% url 'payment:pdf_payment' booking.id %}">View Ticket</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endwith %}
+{% endfor %}
+
+{% else %}
+
+
+
+      <div class="no-bookings">
+        <p>You haven't made any bookings yet.</p>
+        <a href="{% url "available_shows"%}" class="browse-btn">Browse Movies</a>
+      </div>
+  
+   
+
+      {% endif %}
+
+  </div>
+
+  {% endif %}
+
+{% endblock  %}

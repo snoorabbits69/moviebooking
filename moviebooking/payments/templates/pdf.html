@@ -1,0 +1,112 @@
+{% comment %} <html>
+<body>
+<h1>Movie</h1>
+<p>
+Ticket no. {{ booking.booking_code }}<br>
+<span class="secondary">
+{{ order.created|date:"M d, Y" }}
+</span>
+</p>
+<h3>Ticket for show:</h3>
+<div>
+    {% with show=booking.get_show %}
+    <p>{{ show.movie }}</p>
+    <p>{{ show.start_date}}</p>
+    <p>{{ show.showtime }}</p>
+    <p>{{ show.room.name }}</p>
+{% endwith %}
+
+</div>
+<p>
+    booked by:
+{{ booking.name }}<br>
+{{ booking.email }}<br>
+
+</p>
+{% for seat in booking.booking_items.all  %}
+<p>Seat: {{ seat.seat }} </p>
+
+{% endfor %}
+Total:{{ booking.get_total_cost }}
+
+</body>
+</html> {% endcomment %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ticket</title>
+    <link rel="stylesheet" href="{% static "css/pdf.css" %}">
+</head>
+<body>
+    
+    <div class="ticket-container">
+        <div class="ticket">
+          <div class="ticket-header">
+            <div class="logo">MovieHub</div>
+            <div class="booking-code">
+              <span>Booking Code</span>
+              <h3>{{booking.booking_code}}</h3>
+            </div>
+          </div>
+          
+          <div class="ticket-body">
+            {% with show=booking.get_show %}
+
+            <div class="ticket-movie">
+              <h2>{{show.movie}}</h2>
+              <div class="ticket-info">
+                <div class="info-group">
+                  <label>Date</label>
+                  <p>{{show.start_date}}</p>
+                </div>
+                <div class="info-group">
+                  <label>Time</label>
+                  <p>{{show.showtime}}</p>
+                </div>
+                <div class="info-group">
+                  <label>Room</label>
+                  <p>{{show.room.name}}</p>
+                </div>
+              </div>
+            </div>
+            {% endwith %}
+            <div class="ticket-details">
+              <div class="info-group">
+                <label>Seats</label>
+                <p class="seats">
+                    {% for seat  in booking.booking_items.all  %}
+                    
+                   {{seat.seat}}
+                    {% endfor %}
+                
+                </p>
+              </div>
+              <div class="info-group">
+                <label>Price</label>
+                <p>{{booking.get_total_cost}}</p>
+              </div>
+            </div>
+            
+            {% comment %} <div class="ticket-qr">
+              <img src={ticket.qrCode} alt="QR Code" />
+              <p class="qr-description">Scan for entry</p>
+            </div>
+          </div> {% endcomment %}
+          
+          <div class="ticket-footer">
+            <div class="purchase-info">
+              <p>Purchased: {{booking.created}}</p>
+            </div>
+           
+          </div>
+        </div>
+      </div>
+
+
+
+
+</body>
+</html>

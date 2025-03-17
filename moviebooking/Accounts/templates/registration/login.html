@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Log-in{% endblock %}
+
+{% block content %}
+ 
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Login to MovieHub</h2>
+      <p>Enter your credentials to access your account</p>
+    </div>
+    
+    
+    <form method="post" class="auth-form" onSubmit={handleSubmit}>
+      <div class="form-group">
+       {{form}}
+      </div>
+      
+      <button type="submit" class="auth-button">Login</button>
+      {% csrf_token %}
+    </form>
+    
+    <div class="auth-footer">
+      <p>Don't have an account? <a href={% url "register"%}>Register</></p>
+      <a href="/" class="back-link">Back to Home</a>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

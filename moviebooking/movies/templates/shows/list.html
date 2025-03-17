@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}
+Bookmyticket
+{% endblock  %}
+{% block  content%}
+<div>
+  Select a Date:<input type="date" value="{{currentdate}}" id="show-date-picker"/>
+</div>
+
+  <section class="shows-section">
+    <h1>
+      {% if shows %}
+  
+      All Shows
+      {% else %}
+      No Shows on this date
+      {% endif %}
+    
+    </h1>
+    <div class="shows-container">
+{% for show  in shows  %}
+ 
+    <div class="show-item">
+      <div class="show-poster">
+        <img src={{show.posterimage.url}} alt="MOVIE_TITLE" />
+      </div>
+      <div class="show-details">
+        <h2>{{show.title}}</h2>
+        <div class="movie-info-column">
+          <p><strong>Genre:</strong> {{show.genre.all|join:", "}}</p>
+          <p><strong>Rating:</strong> {{show.Rating}}</p>
+          <p><strong>Duration:</strong> {{show.duration}}</p>
+        </div>
+        <h3>Showtimes:</h3>
+        <div class="showtimes-grid">
+          {% for s in show.show_times.all  %}
+          <div class="showtime-card">
+            <p class="showtime-date">{{currentdate}}</p>
+            <p class="showtime-time">{{s.showtime}}</p>
+            <p class="showtime-price">Rs{{s.price}}</p>
+            <a href={{s.get_absolute_url}}  class="book-btn">Book</a>
+          </div>
+          {% endfor %}
+        </div>
+        <a href={{show.get_absolute_url}} class="detail-btn">View Details</a>
+      </div>
+    </div>
+ 
+
+
+
+  {% endfor %}
+</div>
+</section>
+
+{% endblock  %}
+{% block domready %}
+
+
+let datetime=document.getElementById('show-date-picker')
+
+ datetime.addEventListener("change", function(event) {
+  let selectedDate = event.target.value;
+  if(selectedDate){
+  let baseUrl  = `${window.location.origin}/movie/shows/${selectedDate}`;
+window.location.href=baseUrl
+  }
+}); 
+
+
+{% endblock  %}

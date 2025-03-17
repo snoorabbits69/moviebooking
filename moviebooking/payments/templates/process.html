@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title  %}
+payment process
+{% endblock  %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Complete the payment</h2>
+      </div>
+      
+      
+      <form  method="post" action={% url "payment:process" %} class="auth-form">
+        <button type="submit" class="auth-button">Pay</button>
+        {% csrf_token %}
+      </form>
+      
+    
+    </div>
+  </div>
+    
+{% endblock  %}

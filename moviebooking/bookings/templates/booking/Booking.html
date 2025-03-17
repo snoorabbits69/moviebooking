@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block  title%}
+Start booking
+{% endblock  %}
+
+{% block content %}
+
+
+<div class="BookingPage">
+
+    <div class="booking-header">
+        <h1 align="center">{{show.room.name}}</h1>
+        <div align="center">{{show.movie}}</div>
+        <div align="center">{{show.start_date}}</div>
+        <div align="center">{{show.showtime}}</div>  
+        <hr/>
+        <div align="center">Screen</div>
+    
+    </div>
+           
+
+    <section >
+       
+
+        
+      
+ <div id="SeatContainer">
+  {% for seat in seats  %}
+  <div class="child" data-booked={{seat.booked}} data-number={{seat.seat_num}}>
+    {{seat.seat_num}}
+  </div>
+  {% endfor %}
+
+    
+</div>
+
+<div id="selectedseats">
+    Selected Seats:
+</div>
+
+<div id="Total" >
+    Total:{{ticket.total}}
+</div>
+<form action={% url 'checkout'%} method="POST">
+    {{form}}
+    <button id="checkout" class="book-btn" >Checkout</button>
+    {% csrf_token %}
+    </form>
+
+
+</section>  
+
+
+
+</div>
+
+
+{% endblock  %}
+
+{% block domready %}
+let showPrice="{{show.price}}"
+let options={
+    method:'POST',
+    mode:'same-origin'
+}
+
+
+let bookurl=window.location.hostname;
+const selectedSeatsSet = new Set();
+let selectedseats = document.getElementById('selectedseats');
+let total=document.getElementById('Total');
+let childs=document.getElementsByClassName('child');
+
+
+Array.from(childs).forEach((child)=>{
+    if(child.getAttribute('data-booked')=="True"){
+        child.classList.add('selectedSeat');
+    }else{
+        child.addEventListener('click', function() {
+        child.classList.toggle('selectedSeat');
+        let seatno = child.getAttribute('data-number');
+        console.log('Child clicked: ' + seatno);
+        
+
+        if (selectedSeatsSet.has(seatno)) {
+            selectedSeatsSet.delete(seatno); 
+            options['body']=JSON.stringify({seat:seatno,add:"False"})
+          fetch(bookurl,options)
+        } else {
+            selectedSeatsSet.add(seatno);
+            options['body']=JSON.stringify({seat:seatno,add:"True"})
+            fetch(bookurl,options)
+
+        }
+       
+        selectedseats.innerHTML = 'SelectedSeats:';
+        selectedSeatsSet.forEach(seat => {
+            selectedseats.innerHTML += `<p>${seat}</p>`;
+        });
+
+        total.innerHTML="Total_cost:"+selectedSeatsSet.size*showPrice
+
+        
+    });
+}
+})
+
+
+
+
+{% endblock  %}

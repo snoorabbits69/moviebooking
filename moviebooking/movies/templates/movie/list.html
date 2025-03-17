@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}
+Bookmyticket
+{% endblock  %}
+{% block  content%}
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Book Your Favorite Movies</h1>
+    <p>Experience the magic of cinema with the best seats in town</p>
+  </div>
+</section>
+
+<section class="now-showing">
+  <h2>Now Showing</h2>
+  <div class="movie-grid">
+ {% for movie in movies  %}
+      <div class="movie-card" key={movie.id}>
+        <div class="movie-poster">
+          <img src={{movie.posterimage.url}} alt={{movie.title}} />
+        </div>
+        <div class="movie-info">
+          <h3>J{{movie.title}}</h3>
+          <p class="movie-genre">{{ movie.genre.all | join:", "}}</p>
+          <div class="movie-meta">
+            <span class="movie-rating">{{movie.Rating}}</span>
+            <span class="movie-duration">{{movie.duration}}</span>
+          </div>
+          <a href="{{movie.get_absolute_url}}"  class="detail-btn">View Details</a >
+        </div>
+
+      </div>
+      {% endfor %}
+
+  </div>
+
+
+
+
+
+{% endblock  %}
